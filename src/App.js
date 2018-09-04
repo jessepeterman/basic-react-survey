@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
+import React from 'react';
+// import logo from './logo.svg';
 import './App.css';
+// import EntryForm from './components/EntryForm';
 
 class App extends React.Component {
   constructor(props) {
@@ -26,11 +27,13 @@ class App extends React.Component {
       isFormFinished = true;
     }
     const value = 'is' + this.inputNode.name + 'Received';
+    if (this.inputNode.name !== '') {
     this.setState({
       [value]: true,
       target: this.inputNode.name,
       isFormFinished: isFormFinished
     });
+    }
   };
 
   handleInputChange = e => {
@@ -53,13 +56,19 @@ class App extends React.Component {
       }
     } */
 
+  getInputNode = node => {
+    console.log(node);
+  };
+
   render() {
     return (
       <div>
-        <h1>Survey</h1>
+        <h1>React Survey</h1>
         <br />
         {this.state.isnameReceived ? (
-          <h2 className="message">{this.state.message + this.state.target}</h2>
+          < h2 className = "message" > {
+            this.state.isFormFinished ? 'Thanks for completing the survey!' : this.state.message + this.state.target
+          } < /h2>
         ) : (
           <form className="form" onSubmit={this.handleSubmit.bind(this)}>
             <input
@@ -67,10 +76,12 @@ class App extends React.Component {
               name="name"
               placeholder="Enter your name"
               onChange={this.handleInputChange}
-              value={this.state.name || ''}
+              value = {
+                this.state.name || ''
+              }
               ref={node => (this.inputNode = node)}
             />
-            <input type="submit" />
+            < button id = "submit-btn" type="submit"> Submit </button>
           </form>
         )}
 
@@ -82,32 +93,37 @@ class App extends React.Component {
                 name="email"
                 placeholder="Enter your email"
                 onChange={this.handleInputChange}
-                value={this.state.email || ''}
+                value={ this.state.email || ''}
                 ref={node => (this.inputNode = node)}
               />
-              <input type="submit" />
+              <button id="submit-btn" type="submit">Submit</button>
             </form>
           )}
 
         {this.state.isemailReceived && (
           <form className="form" onSubmit={this.handleSubmit.bind(this)}>
-            <input
+            {
+              !this.state.isFormFinished && < input
               type="text"
               name="address"
               placeholder="Enter your address"
               disabled={this.state.isFormFinished}
               onChange={this.handleInputChange}
-              value={this.state.isFormFinished ? '' : this.state.address}
+              value = {this.state.address || ''}
               ref={node => (this.inputNode = node)}
-            />
+              /> }
             {!this.state.isFormFinished ? (
-              <input type="submit" disabled={this.state.isFormFinished} />
-            ) : (
               <button
+              className = "submit-btn"
+              disabled = {
+                this.state.isFormFinished
+              }
+              > Submit </button>
+            ) : (
+              this.state.isShowResults || < button className = "submit-btn"
                 onClick={this.printResults}
-                disabled={!this.state.isFormFinished}
               >
-                Show Results
+                {!this.state.isShowResults ? 'Show Results' : 'Results'}
               </button>
             )}
           </form>
